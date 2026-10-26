@@ -1,25 +1,84 @@
-"use client";
-import { useState } from "react";
+import { getExplainers } from "../lib/wordpress";
+import SectionHeading from "../components/SectionHeading";
+import ResourceCards from "../components/ResourceCards";
+import ClimateQuiz from "../components/ClimateQuiz";
 
-const resources = [
-  {type:"EXPLAINER",title:"Understanding the WEFE Nexus",desc:"How water, energy, food and ecosystems connect.",color:"mint",symbol:"◉"},
-  {type:"EXPLAINER",title:"What Is Climate Change?",desc:"A clear introduction to climate change in the Mediterranean.",color:"yellow",symbol:"☀"},
-  {type:"EXPLAINER",title:"Living with Heat",desc:"How communities can adapt to heatwaves.",color:"coral",symbol:"〰"},
-  {type:"INFOGRAPHIC",title:"Water, Food, Climate & Nature",desc:"Explore the changes shaping our shared region.",color:"blue",symbol:"♧"},
-];
 const actions = [
-  {type:"5-STEP CHECKLIST",title:"Waste Less Food",desc:"Simple choices that can reduce food waste.",color:"yellow",symbol:"✳"},
-  {type:"5-STEP CHECKLIST",title:"Save Water at Home",desc:"Practical ideas to make every drop count.",color:"blue",symbol:"◌"},
-  {type:"HOW-TO GUIDE",title:"Create a Mini Food Garden",desc:"Turn a balcony or rooftop into a greener space.",color:"mint",symbol:"♧"},
-  {type:"HOW-TO GUIDE",title:"Cope with a Heatwave",desc:"Stay safer and support others during extreme heat.",color:"coral",symbol:"☼"},
+  { type: "5-STEP CHECKLIST", title: "Waste Less Food", desc: "Simple choices that can reduce food waste.", color: "yellow", symbol: "✳" },
+  { type: "5-STEP CHECKLIST", title: "Save Water at Home", desc: "Practical ideas to make every drop count.", color: "blue", symbol: "◌" },
+  { type: "HOW-TO GUIDE", title: "Create a Mini Food Garden", desc: "Turn a balcony or rooftop into a greener space.", color: "mint", symbol: "♧" },
+  { type: "HOW-TO GUIDE", title: "Cope with a Heatwave", desc: "Stay safer and support others during extreme heat.", color: "coral", symbol: "☼" },
 ];
-const questions = [
-  ["Have you noticed hotter days or longer heatwaves where you live?",["Yes, definitely","A little","Not sure"]],
-  ["Have water shortages affected your community?",["Yes, often","Sometimes","Not that I know of"]],
-  ["Have you noticed changes in local plants, wildlife or seasons?",["Yes","Maybe","Not sure"]],
-  ["Do extreme weather events affect your daily life?",["More than before","Occasionally","Rarely"]],
-  ["Would you like to take practical climate action?",["Absolutely","I’d like to learn how","I’m still exploring"]],
-];
-function Cards({items}) { return <div className="cards">{items.map((r,i)=><a className="card" href="https://ourclimateourcommunity.org/" key={r.title}><div className={"art "+r.color}><span>{r.symbol}</span><small>0{i+1}</small></div><div className="card-copy"><small>{r.type}</small><h3>{r.title}</h3><p>{r.desc}</p><b>↗</b></div></a>)}</div> }
-function Quiz(){const [step,setStep]=useState(0),[answers,setAnswers]=useState([]),[done,setDone]=useState(false);return <section className="quiz section" id="quiz"><div><p className="eyebrow">✳ CONNECT THE DOTS</p><h2>Is your climate<br/><em>changing?</em></h2><p>Reflect on how climate change may be showing up where you live.</p><small>◷ 5 QUESTIONS · 30 SECONDS</small></div><div className="quizbox">{done?<><p className="eyebrow">YOUR REFLECTION</p><h3>Your observations matter.</h3><p>Every community experiences climate change differently. Keep noticing local changes and explore practical actions you can take together.</p><button className="button dark" onClick={()=>{setStep(0);setAnswers([]);setDone(false)}}>Take the quiz again ↻</button></>:<><div className="progress">QUESTION {step+1} / 5 <span style={{width:`${(step+1)*20}%`}}/></div><h3>{questions[step][0]}</h3>{questions[step][1].map(a=><button key={a} className={"answer "+(answers[step]===a?"chosen":"")} onClick={()=>setAnswers(old=>{const n=[...old];n[step]=a;return n})}>{a}<span>{answers[step]===a?"●":"○"}</span></button>)}<div className="quiz-controls"><button onClick={()=>setStep(Math.max(0,step-1))} disabled={!step}>← Back</button><button className="button dark" disabled={!answers[step]} onClick={()=>step===4?setDone(true):setStep(step+1)}>{step===4?"See reflection":"Next question →"}</button></div></>}</div></section>}
-export default function Home(){return <><header className="header"><a className="brand" href="#home"><span>◒</span><b>Our Climate<br/>Our Community</b></a><nav><a href="#understand">Understand</a><a href="#take-action">Take Action</a><a href="#quiz">Quiz</a><a href="#educators">Teach & Facilitate</a><a href="#directory">Get Involved</a></nav><span className="lang">EN⌄</span></header><main><section className="hero" id="home"><div className="hero-copy"><p className="eyebrow">✳ ONE SEA. MANY SHORES. ONE FUTURE.</p><h1>Our Climate.<br/><em>Our Community.</em></h1><p className="hero-desc">What climate change really means for life around the Mediterranean — and what we can do about it, together.</p><div className="hero-actions"><a className="button dark" href="#understand">Explore the issues ↗</a><a className="text-link" href="#take-action">Find ways to act →</a></div><p className="hero-note">Science made simple. <b>Action made possible.</b></p></div><div className="hero-art" aria-label="Illustration of a Mediterranean coastal landscape"><span className="sun"/><span className="art-caption">THE MEDITERRANEAN</span><div className="hill"/><div className="sea"/><div className="coast"/><span className="plant">♧</span><span className="art-bottom">OUR SHARED HOME ✳</span></div><div className="hero-foot"><span>01 / UNDERSTAND</span><span>CLIMATE EDUCATION FOR THE MEDITERRANEAN</span><span>SCROLL TO EXPLORE ↓</span></div></section><section className="section" id="understand"><div className="section-head"><div><p className="eyebrow">✳ UNDERSTAND</p><h2>Our climate is changing.<br/><em>Understanding is where we start.</em></h2></div><p>Clear, accessible explanations of how climate change is reshaping water, food, nature and daily life.</p></div><Cards items={resources}/><div className="section-foot"><span>KNOWLEDGE IS A STARTING POINT</span><a href="https://ourclimateourcommunity.org/">Explore all resources →</a></div></section><section className="section alternate" id="take-action"><div className="section-head"><div><p className="eyebrow">✳ TAKE ACTION</p><h2>Small steps.<br/><em>Shared impact.</em></h2></div><p>Discover practical ways to make a difference — individually, with your family, and in your community.</p></div><Cards items={actions}/><div className="section-foot"><span>EVERY ACTION COUNTS</span><a href="https://ourclimateourcommunity.org/">Explore all guides →</a></div></section><Quiz/><section className="section educators" id="educators"><div><p className="eyebrow">✳ TEACH & FACILITATE</p><h2>Learn together.<br/><em>Shape tomorrow.</em></h2><p>Ready-to-use activities and tools for educators working with young people across the Mediterranean. Bring climate conversations into classrooms, youth groups and community spaces.</p><a className="button dark" href="https://ourclimateourcommunity.org/">Explore teaching resources ↗</a></div><div className="edu-art"><span>✳</span><b>IDEAS GROW<br/>WHEN WE SHARE.</b></div></section><section className="section directory" id="directory"><p className="eyebrow">✳ GET INVOLVED</p><h2>Good things happen<br/><em>when we connect.</em></h2><p>Connect with organizations working on climate action, community empowerment, education and youth engagement across the Mediterranean.</p><a className="button dark" href="https://ourclimateourcommunity.org/">Explore the organization directory ↗</a></section><section className="section newsletter"><div><p className="eyebrow">✳ STAY CONNECTED</p><h2>One Mediterranean.<br/><em>Many ways to make a difference.</em></h2><p>Get stories, updates and practical climate tips from across our shared region.</p></div><form onSubmit={e=>{e.preventDefault();alert("Connect a newsletter provider before launch.")}}><label htmlFor="email">YOUR EMAIL ADDRESS</label><div className="email-row"><input id="email" type="email" placeholder="you@example.com" required/><button aria-label="Subscribe">↗</button></div><small>Newsletter integration required before launch.</small></form></section></main><footer className="footer"><div className="footer-top"><a className="brand" href="#home"><span>◒</span><b>Our Climate<br/>Our Community</b></a><p>Protecting what we share:<br/><strong>our climate and our Mediterranean.</strong></p><div><a href="#understand">Understand</a><a href="#take-action">Take action</a><a href="#educators">Teach & facilitate</a><a href="#directory">Get involved</a></div></div><div className="partners"><span>IN COLLABORATION WITH</span><b>WES-BCA</b><b>European Union</b><b>Mediterranean Partners</b></div><p className="copyright">© 2026 Our Climate – Our Community · Next.js</p></footer></>}
+
+function ActionCards({ items }) {
+  return (
+    <div className="cards">
+      {items.map((item, index) => (
+        <a className="card" href="https://ourclimateourcommunity.org/" key={item.title}>
+          <div className={`art ${item.color}`}><span>{item.symbol}</span><small>{String(index + 1).padStart(2, "0")}</small></div>
+          <div className="card-copy"><small>{item.type}</small><h3>{item.title}</h3><p>{item.desc}</p><b aria-hidden="true">↗</b></div>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+export default async function Home() {
+  const explainers = await getExplainers(4);
+
+  return (
+    <>
+      <header className="header">
+        <a className="brand" href="#home"><span>◒</span><b>Our Climate<br />Our Community</b></a>
+        <nav aria-label="Main navigation"><a href="#understand">Understand</a><a href="#take-action">Take Action</a><a href="#quiz">Quiz</a><a href="#educators">Teach & Facilitate</a><a href="#directory">Get Involved</a></nav>
+        <span className="lang">EN⌄</span>
+      </header>
+      <main>
+        <section className="hero" id="home">
+          <div className="hero-copy">
+            <p className="eyebrow">✳ ONE SEA. MANY SHORES. ONE FUTURE.</p>
+            <h1>Our Climate.<br /><em>Our Community.</em></h1>
+            <p className="hero-desc">What climate change really means for life around the Mediterranean — and what we can do about it, together.</p>
+            <div className="hero-actions"><a className="button dark" href="#understand">Explore the issues ↗</a><a className="text-link" href="#take-action">Find ways to act →</a></div>
+            <p className="hero-note">Science made simple. <b>Action made possible.</b></p>
+          </div>
+          <div className="hero-art" role="img" aria-label="Illustration of a Mediterranean coastal landscape"><span className="sun" /><span className="art-caption">THE MEDITERRANEAN</span><div className="hill" /><div className="sea" /><div className="coast" /><span className="plant">♧</span><span className="art-bottom">OUR SHARED HOME ✳</span></div>
+          <div className="hero-foot"><span>01 / UNDERSTAND</span><span>CLIMATE EDUCATION FOR THE MEDITERRANEAN</span><span>SCROLL TO EXPLORE ↓</span></div>
+        </section>
+
+        <section className="section" id="understand">
+          <SectionHeading eyebrow="UNDERSTAND" title="Understanding Climate Change" accent="in the Mediterranean" description="Explore explainers published by Our Climate Our Community, loaded directly from the WordPress REST API." />
+          <ResourceCards items={explainers} emptyMessage="We couldn't load explainers right now. Please try again in a moment." />
+          <div className="section-foot"><span>KNOWLEDGE IS A STARTING POINT</span><a href="https://ourclimateourcommunity.org/" target="_blank" rel="noreferrer">Explore all resources →</a></div>
+        </section>
+
+        <section className="section alternate" id="take-action">
+          <SectionHeading eyebrow="TAKE ACTION" title="Small steps." accent="Shared impact." description="Discover practical ways to make a difference — individually, with your family, and in your community." />
+          <ActionCards items={actions} />
+          <div className="section-foot"><span>EVERY ACTION COUNTS</span><a href="https://ourclimateourcommunity.org/" target="_blank" rel="noreferrer">Explore all guides →</a></div>
+        </section>
+
+        <ClimateQuiz />
+
+        <section className="section educators" id="educators">
+          <div><p className="eyebrow">✳ TEACH & FACILITATE</p><h2>Learn together.<br /><em>Shape tomorrow.</em></h2><p>Ready-to-use activities and tools for educators working with young people across the Mediterranean. Bring climate conversations into classrooms, youth groups and community spaces.</p><a className="button dark" href="https://ourclimateourcommunity.org/" target="_blank" rel="noreferrer">Explore teaching resources ↗</a></div>
+          <div className="edu-art"><span>✳</span><b>IDEAS GROW<br />WHEN WE SHARE.</b></div>
+        </section>
+
+        <section className="section directory" id="directory">
+          <p className="eyebrow">✳ GET INVOLVED</p><h2>Good things happen<br /><em>when we connect.</em></h2><p>Connect with organizations working on climate action, community empowerment, education and youth engagement across the Mediterranean.</p><a className="button dark" href="https://ourclimateourcommunity.org/" target="_blank" rel="noreferrer">Explore the organization directory ↗</a>
+        </section>
+
+        <section className="section newsletter">
+          <div><p className="eyebrow">✳ STAY CONNECTED</p><h2>One Mediterranean.<br /><em>Many ways to make a difference.</em></h2><p>Get stories, updates and practical climate tips from across our shared region.</p></div>
+          <form onSubmit={(event) => { event.preventDefault(); alert("Connect a newsletter provider before launch."); }}><label htmlFor="email">YOUR EMAIL ADDRESS</label><div className="email-row"><input id="email" type="email" placeholder="you@example.com" required /><button aria-label="Subscribe">↗</button></div><small>Newsletter integration required before launch.</small></form>
+        </section>
+      </main>
+      <footer className="footer">
+        <div className="footer-top"><a className="brand" href="#home"><span>◒</span><b>Our Climate<br />Our Community</b></a><p>Protecting what we share:<br /><strong>our climate and our Mediterranean.</strong></p><div><a href="#understand">Understand</a><a href="#take-action">Take action</a><a href="#educators">Teach & facilitate</a><a href="#directory">Get involved</a></div></div>
+        <div className="partners"><span>IN COLLABORATION WITH</span><b>WES-BCA</b><b>European Union</b><b>Mediterranean Partners</b></div>
+        <p className="copyright">© 2026 Our Climate – Our Community · Next.js</p>
+      </footer>
+    </>
+  );
+}
