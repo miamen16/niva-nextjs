@@ -2,6 +2,7 @@ import { getExplainers } from "../lib/wordpress";
 import SectionHeading from "../components/SectionHeading";
 import ResourceCards from "../components/ResourceCards";
 import ClimateQuiz from "../components/ClimateQuiz";
+import NewsletterForm from "../components/NewsletterForm";
 
 const actions = [
   { type: "5-STEP CHECKLIST", title: "Waste Less Food", desc: "Simple choices that can reduce food waste.", color: "yellow", symbol: "✳" },
@@ -71,7 +72,7 @@ export default async function Home() {
 
         <section className="section newsletter">
           <div><p className="eyebrow">✳ STAY CONNECTED</p><h2>One Mediterranean.<br /><em>Many ways to make a difference.</em></h2><p>Get stories, updates and practical climate tips from across our shared region.</p></div>
-          <form onSubmit={(event) => { event.preventDefault(); alert("Connect a newsletter provider before launch."); }}><label htmlFor="email">YOUR EMAIL ADDRESS</label><div className="email-row"><input id="email" type="email" placeholder="you@example.com" required /><button aria-label="Subscribe">↗</button></div><small>Newsletter integration required before launch.</small></form>
+          <NewsletterForm />
         </section>
       </main>
       <footer className="footer">
